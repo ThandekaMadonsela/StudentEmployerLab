@@ -13,5 +13,10 @@ namespace StudentEmployerLab.Models
         public string CityOrTown { get; set; }
         public string Province { get; set; }
         public string PostalCode { get; set; }
+
+        public override string ToString()
+        {
+            return $"{AddressName}, {Street}, {CityOrTown}, {Province}, {PostalCode}";
+        }
     }
 }

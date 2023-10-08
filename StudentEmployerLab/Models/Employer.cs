@@ -10,7 +10,7 @@ namespace StudentEmployerLab.Models
     internal class Employer : User
     {
         public string StaffNumber { get; set; }
-        public float Position;
+        public String Position;
 
         public Employer(string fname, string lastname, string staffNumber)
            : base(fname, lastname)
@@ -25,9 +25,13 @@ namespace StudentEmployerLab.Models
 
             if (!IsValidStaffNumber(StaffNumber))
             {
-                throw new ArgumentException("Invalid staff number");
+                Console.WriteLine("Invalid staff number");
             }
-            Console.WriteLine("This is an Employer User.");
+            else
+            { 
+                Console.WriteLine("This confirms that staff number is confirmed.");
+            }
+            
         }
 
         private bool IsValidStaffNumber(string staffNumber)

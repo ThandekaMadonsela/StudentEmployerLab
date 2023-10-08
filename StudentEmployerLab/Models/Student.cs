@@ -19,21 +19,26 @@ namespace StudentEmployerLab.Models
             StudentNumber = studentNumber;
         }
 
+
         public override void ValidateUser()
         {
-            //Calling base class validate method first
+            
             base.ValidateUser();
 
             if (!IsValidStudentNumber(StudentNumber))
             {
-                throw new ArgumentException("Invalid student number");
+                Console.WriteLine("Invalid student number");
             }
-            Console.WriteLine("This is a Student User.");
+            else
+            {
+                Console.WriteLine("This confirms that student number is confirmed.");
+            }
+           
         }
 
         private bool IsValidStudentNumber(string studentNumber)
         {
-            return !string.IsNullOrEmpty(studentNumber) && studentNumber.Length == 8 && Regex.IsMatch(studentNumber, @"^\d+$");
+            return !string.IsNullOrEmpty(studentNumber) && studentNumber.Length == 8 && Regex.IsMatch(studentNumber, @"^\d{8}$");
         }
 
     }

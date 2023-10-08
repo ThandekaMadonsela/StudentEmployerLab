@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace StudentEmployerLab.Models
@@ -10,11 +11,13 @@ namespace StudentEmployerLab.Models
         public string PhoneNumber { get; set; }
         public string EmailAddress { get; set; }
         public string IDnumber { get; set; }
+        public List<Address> Addresses { get; set; }
 
         public User(string fname, string lastname)
         {
             Firstname = fname;
             Surname = lastname;
+            Addresses = new List<Address>();
         }
 
         public virtual void ValidateUser()
@@ -22,35 +25,48 @@ namespace StudentEmployerLab.Models
             //Firstname and Surname Validation
             if (!IsValidName(Firstname) || !IsValidName(Surname))
             {
-                throw new ArgumentException("Invalid name or surname");
+                Console.WriteLine("Invalid name or surname");
             }
 
             //ID Number validation
             if (!IsValidIDNumber(IDnumber))
             {
-                throw new ArgumentException("Invalid ID number");
+                Console.WriteLine("Invalid ID number");
             }
 
             //Phone Number validation 
             if (!IsValidPhoneNumber(PhoneNumber))
             {
-                throw new ArgumentException("Invalid phone number");
+                Console.WriteLine("Invalid phone number");
             }
 
-            //Email validation
-            if (!IsValidEmail(EmailAddress))
-            {
-                throw new ArgumentException("Invalid email address");
-            }
+            ////Email validation
+            //if (!IsValidEmail(EmailAddress))
+            //{
+            //    Console.WriteLine("Invalid email address");
+            //}
         }
 
         //Get FullName
+        //public string GetFullName(ref string firstName, ref string lastName)
+        //{
+        //    if (!string.IsNullOrEmpty(Firstname) && !string.IsNullOrEmpty(Surname))
+        //    {
+        //        StringBuilder sb = new StringBuilder();
+        //        sb.Append($"Name: {Firstname} {Surname}");
+        //        return sb.ToString();
+        //    }
+        //    return "No names provided";
+        //}
         public bool GetFullName(ref string firstName, ref string lastName)
         {
             if (!string.IsNullOrEmpty(Firstname) && !string.IsNullOrEmpty(Surname))
             {
                 firstName = Firstname;
                 lastName = Surname;
+                StringBuilder sb = new StringBuilder();
+                sb.Append($"Name: {Firstname} {Surname}");
+                Console.WriteLine(sb.ToString());
                 return true;
             }
             else
@@ -60,18 +76,20 @@ namespace StudentEmployerLab.Models
             }
         }
 
+
         //VALIDATION METHODS
 
         //Firstname and Surname Validation
         private bool IsValidName(string name)
         {
-            return !string.IsNullOrEmpty(name) && !Regex.IsMatch(name, @"[^A-Za-z]");
+            return !string.IsNullOrEmpty(name) && !Regex.IsMatch(name, @"[^A-Za-z]") && !name.Contains(" ") && name.Length >= 3;
+
         }
 
         //ID Number validation
         private bool IsValidIDNumber(string idNumber)
         {
-            return !string.IsNullOrEmpty(idNumber) && idNumber.Length == 13 && Regex.IsMatch(idNumber, @"^\d+$");
+            return !string.IsNullOrEmpty(idNumber) && idNumber.Length == 13 && Regex.IsMatch(idNumber, @"^\d+$");//Also checking if the charecteres are only numbers(0-9)
         }
 
         //Phone Numver validation
@@ -81,9 +99,10 @@ namespace StudentEmployerLab.Models
         }
 
         //Email Validation
-        private bool IsValidEmail(string email)
-        {
-            return !string.IsNullOrEmpty(email) && Regex.IsMatch(email, @"^\w+@\w+\.\w+$");
-        }
+        //private bool IsValidEmail(string email)
+        //{
+        //    return !string.IsNullOrEmpty(email) && Regex.IsMatch(email, @"^\w+@\w+\.\w+$");
+        //}
+
     }
 }
