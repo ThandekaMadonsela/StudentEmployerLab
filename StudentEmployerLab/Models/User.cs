@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.AccessControl;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace StudentEmployerLab.Models
 {
@@ -24,7 +26,7 @@ namespace StudentEmployerLab.Models
         public virtual bool ValidateUser()
         {
             //Firstname and Surname Validation
-            if (!IsValidName(FirstName) || !IsValidName(Surname))
+            if (!IsValidName(FirstName,"name") || !IsValidName(Surname, "surname"))
                 return false;
 
             //ID Number validation
@@ -36,8 +38,8 @@ namespace StudentEmployerLab.Models
                 return false;
 
             //Email validation
-            if (!IsValidEmail(EmailAddress))
-                return false;
+            //if (!IsValidEmail(EmailAddress))
+            //    return false;
 
             //All Valid
             return true;
@@ -49,7 +51,6 @@ namespace StudentEmployerLab.Models
            
             if (string.IsNullOrEmpty(FirstName) && !string.IsNullOrEmpty(Surname))
             {
-                Console.WriteLine("First name or surname is empty");
                 firstName = lastName = null;
                 return false;
             }
@@ -62,7 +63,7 @@ namespace StudentEmployerLab.Models
         //SETTERS
         public bool SetFirstName(string value)
         {
-            if (!IsValidName(value))
+            if (!IsValidName(value,"name"))
                 return false;
             
             //If valid
@@ -72,7 +73,7 @@ namespace StudentEmployerLab.Models
 
         public bool SetSurname(string value)
         {
-            if (!IsValidName(value))
+            if (!IsValidName(value, "surname"))
                 return false;
 
             //If valid
@@ -130,31 +131,59 @@ namespace StudentEmployerLab.Models
         //VALIDATION METHODS
 
         //Firstname and Surname Validation
-        private bool IsValidName(string name)
+        private bool IsValidName(string name, string nameType)
         {
-            Console.WriteLine("Invalid name or surname");
-            return !string.IsNullOrEmpty(name) && !Regex.IsMatch(name, @"[^A-Za-z]") && !name.Contains(" ") && name.Length >= 3;
+           
+            if(string.IsNullOrEmpty(name) ||  name.Contains(" ") || name.Length <= 3)
+            {
+                Console.WriteLine($"The {nameType} {name} is invalid");
+                return false;
+            }
+
+            //If valid
+            return true;
         }
 
         //ID Number validation
         private bool IsValidIDNumber(string idNumber)
         {
-            Console.WriteLine("Invalid ID number");
-            return !string.IsNullOrEmpty(idNumber) && idNumber.Length == 13 && Regex.IsMatch(idNumber, @"^\d+$");//Also checking if the charecteres are only numbers(0-9)
+           
+            if(string.IsNullOrEmpty(idNumber) || idNumber.Length != 13)//!Regex.IsMatch(idNumber, @"^\d+$")
+            {
+                Console.WriteLine($"The ID number {idNumber} is invalid");
+                return false;
+            }
+
+            //If valid
+            return true;
         }
 
         //Phone Numver validation
         private bool IsValidPhoneNumber(string phoneNumber)
         {
-            Console.WriteLine("Invalid phone number");
-            return !string.IsNullOrEmpty(phoneNumber) && Regex.IsMatch(phoneNumber, @"^0\d{9}$");
+            
+            if(string.IsNullOrEmpty(phoneNumber) || !Regex.IsMatch(phoneNumber, @"^0\d{9}$"))
+            {
+                Console.WriteLine($"The phone number {phoneNumber}  is invalid");
+                return false;
+            }
+
+            //If valid
+            return true;
         }
 
         //Email Validation
         private bool IsValidEmail(string email)
         {
-            Console.WriteLine("Invalid email address");
-            return !string.IsNullOrEmpty(email) && Regex.IsMatch(email, @"^\w+@\w+\.\w+$");
+           
+            if(string.IsNullOrEmpty(email) || !Regex.IsMatch(email, @"^\w+@\w+\.\w+$"))
+            {
+                Console.WriteLine($"The email {email} address");
+                return false;
+            }
+
+            //If valid
+            return true;
         }
 
     }

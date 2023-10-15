@@ -75,9 +75,9 @@ namespace StudentEmployerLab.Models
         //VALIDATION METHOD
         private bool IsValidStaffNumber(string staffNumber)
         {
-            if(!string.IsNullOrEmpty(staffNumber) && Regex.IsMatch(staffNumber, @"^[AB]\d{7}$"))
+            if(string.IsNullOrEmpty(staffNumber) || !Regex.IsMatch(staffNumber, @"^[AB]\d{7}$"))
             {
-                Console.WriteLine("Invalid stuff number");
+                Console.WriteLine($"The staff number {staffNumber} invalid");
                 return false;
             }
 

@@ -10,17 +10,18 @@ Console.WriteLine("Student Employment Lab!");
 
 //////////////////////////// POPULATE USERS /////////////////////////////////////
 
-
 //EMPTY LIST OF USERS
 List<User> users = new List<User>();
 
-
+Console.WriteLine("-------------------------STUDENTS INITIALIZING VALIDATIONS-------------------------------");
 // ADD STUDENTS TO LIST OF USERS
 for (int i = 0; i < 10; i++)
 {
     Student student = new Student(Data.FirstNames[i], Data.Surnames[i], Data.StudentNumbers[i]);
-
-    if (!Util.AssignAddresses(student, Data.StreetNames, Data.Cities, Data.Provinces, Data.AddressNames))
+    student.SetIDNumber(Data.SAIDs[i]);
+    student.SetPhoneNumber(Data.telephoneNumbers[i]);
+    
+    ;    if (!Util.AssignAddresses(student, Data.StreetNames, Data.Cities, Data.Provinces, Data.AddressNames))
     {
         Console.WriteLine("Unable to assigning address to student");
     }
@@ -29,7 +30,7 @@ for (int i = 0; i < 10; i++)
         users.Add(student);
     }
 }
-
+Console.WriteLine("-------------------------EMPLOYERS INITIALIZING VALIDATIONS-------------------------------");
 // ADD EMPLOYERS TO LIST OF USERS
 for (int i = 0; i < 10; i++)
 {
@@ -57,14 +58,26 @@ for (int i = 0; i < 10; i++)
 ////////////////////////////////////////// DISPLAY /////////////////////////////////////////
 
 string firstName, Surname;
-
+Console.WriteLine("--------------------------------------------- USERS ---------------------------------------- ");
 foreach (var user in users)
 {
+    Console.WriteLine();
+    Console.WriteLine($"User validation:");
     user.ValidateUser();
+    Console.WriteLine();
+
     user.GetFullName(out firstName, out Surname);
-    
-    Console.WriteLine($"Names: {firstName} {Surname}");
-    
+
+    Console.WriteLine();
+
+    if (firstName == null || Surname == null)
+    {
+        Console.WriteLine($"Invalid name or surname");
+    }
+    else
+    {
+        Console.WriteLine($"Names: {firstName} {Surname}");
+    }
     Console.WriteLine("Addresses:");
     foreach (var address in user.Addresses)
     {

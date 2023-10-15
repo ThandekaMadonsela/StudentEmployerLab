@@ -64,10 +64,10 @@ namespace StudentEmployerLab.Models
         //VALIDATION METHOD
         private bool IsValidStudentNumber(string studentNumber)
         {
-            if(!string.IsNullOrEmpty(studentNumber) && 
-               studentNumber.Length == 8 && Regex.IsMatch(studentNumber, @"^\d{8}$"))
+            if(string.IsNullOrEmpty(studentNumber) ||
+               studentNumber.Length != 8 || !Regex.IsMatch(studentNumber, @"^\d{8}$"))
             {
-                Console.WriteLine("Invalid student number");
+                Console.WriteLine($"The student number {studentNumber} is invalid");
                 return false;
             }
 
