@@ -1,4 +1,6 @@
-﻿using System;
+﻿using StudentEmployerLab.Interfaces;
+using StudentEmployerLab.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,36 +9,80 @@ using System.Threading.Tasks;
 
 namespace StudentEmployerLab.Models
 {
-    internal class Employer : User
+    internal class Employer : User,IEmployer
     {
-        public string StaffNumber { get; set; }
-        public String Position;
+        private readonly IPostService _postService;
+        private string StaffNumber;
+        private string Position;
+        public List<Post> Posts { get; set; }
 
         public Employer(string fname, string lastname, string staffNumber)
            : base(fname, lastname)
         {
-            StaffNumber = staffNumber;
+            SetStaffNumber(staffNumber);
+            _postService = new PostService();
         }
 
-        public override void ValidateUser()
+        //VALIDATE USER METHOD
+        public override bool ValidateUser()
         {
-            //Calling base class validate method first
-            base.ValidateUser();
+            if(!base.ValidateUser())
+               return false;
 
             if (!IsValidStaffNumber(StaffNumber))
-            {
-                Console.WriteLine("Invalid staff number");
-            }
-            else
-            { 
-                Console.WriteLine("This confirms that staff number is confirmed.");
-            }
+                return false;
+           
+            //If valid
+            Console.WriteLine("Employer validation successful");
+            return true;
             
         }
 
+        //CREATE POST
+        public Post CreatePost()
+        {
+            Post post = _postService.CreatePost(this);
+            return post;
+        }
+
+        //SETTERS
+        public bool SetStaffNumber(string value)
+        {
+            if (!IsValidStaffNumber(value))
+                return false;
+
+            //If valid
+            StaffNumber = value;
+            return true;
+        }
+        public bool SetPosition(string value)
+        {
+            Position = value;
+            return true;
+        }
+
+        //GETTERS
+        public string GetStaffNumber()
+        {
+            return StaffNumber;
+        }
+
+        public string GetPosition()
+        {
+            return Position;
+        }
+
+        //VALIDATION METHOD
         private bool IsValidStaffNumber(string staffNumber)
         {
-            return !string.IsNullOrEmpty(staffNumber) && Regex.IsMatch(staffNumber, @"^[AB]\d{7}$");
+            if(!string.IsNullOrEmpty(staffNumber) && Regex.IsMatch(staffNumber, @"^[AB]\d{7}$"))
+            {
+                Console.WriteLine("Invalid stuff number");
+                return false;
+            }
+
+            //If valid
+            return true;
         }
     }
 }

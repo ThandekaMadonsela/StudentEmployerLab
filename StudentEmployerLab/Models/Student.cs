@@ -10,35 +10,69 @@ namespace StudentEmployerLab.Models
     internal class Student : User
     {
 
-        public string StudentNumber { get; set; }
-        public float AverageMark;
+        private string StudentNumber;
+        private string AverageMark;
 
         public Student(string fname, string lastname, string studentNumber)
             : base(fname, lastname)
         {
-            StudentNumber = studentNumber;
+            SetStudentNumber(studentNumber);
         }
 
-
-        public override void ValidateUser()
+        //VALIDATE USER METHOD
+        public override bool ValidateUser()
         {
-            
-            base.ValidateUser();
+
+            if (!base.ValidateUser())
+                return false;
 
             if (!IsValidStudentNumber(StudentNumber))
-            {
-                Console.WriteLine("Invalid student number");
-            }
-            else
-            {
-                Console.WriteLine("This confirms that student number is confirmed.");
-            }
-           
+                return false;
+            
+            //If valid
+            Console.WriteLine("Student validation successful");
+            return true;
         }
 
+        //SETTERS
+        public bool SetStudentNumber(string value)
+        {
+            if (!IsValidStudentNumber(value))
+                return false;
+
+            //If valid
+            StudentNumber = value;
+            return true;
+        }
+        public bool SetAverageMark(string value)
+        {
+            AverageMark = value;
+            return true;
+        }
+
+        //GETTERS
+        public string GetStudentNumber()
+        {
+            return StudentNumber;
+        }
+
+        public string GetAverageMark()
+        {
+            return AverageMark;
+        }
+
+        //VALIDATION METHOD
         private bool IsValidStudentNumber(string studentNumber)
         {
-            return !string.IsNullOrEmpty(studentNumber) && studentNumber.Length == 8 && Regex.IsMatch(studentNumber, @"^\d{8}$");
+            if(!string.IsNullOrEmpty(studentNumber) && 
+               studentNumber.Length == 8 && Regex.IsMatch(studentNumber, @"^\d{8}$"))
+            {
+                Console.WriteLine("Invalid student number");
+                return false;
+            }
+
+            //If valid
+            return true;
         }
 
     }

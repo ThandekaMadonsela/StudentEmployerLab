@@ -8,7 +8,7 @@ namespace StudentEmployerLab.Models.Utilities
 {
     internal class Util
     {
-        private static Random random = new Random();
+        public static Random Random = new Random();
 
         public static List<string> GenerateRandomNumbers(int count, int min, int max, int length)
         {
@@ -17,7 +17,7 @@ namespace StudentEmployerLab.Models.Utilities
             for (int i = 0; i < count; i++)
             {
                 // Generate a random n-digit number within the specified range
-                int randomValue = random.Next(min, max + 1);
+                int randomValue = Random.Next(min, max + 1);
 
                 // Format the number as an n-digit string as specified by length
                 string formattedNumber = randomValue.ToString("D" + length);
@@ -28,32 +28,52 @@ namespace StudentEmployerLab.Models.Utilities
 
             return generatedNumbers;
         }
-        //public static string GenerateStudentNumber(int min, int max, int length)
-        //{
-        //    Random random = new Random();
-        //    int randomValue = random.Next(min, max + 1);
-        //    string formattedStudentNumber = randomValue.ToString("D" + length);
-        //    return formattedStudentNumber;
-        //}
+       public static bool AssignAddresses(User user, List<string> streetNames, List<string> cities, List<string> provinces, List<string> addressNames)
+        {
+            if (user == null || streetNames == null || cities == null || provinces == null || addressNames == null)
+            {
+                Console.WriteLine("Data lists cannot be empty");
+                return false;
+            }
 
-        //public static string GenerateStaffNumber(int min, int max, int length)
-        //{
-        //    Random random = new Random();
-        //    char prefix = random.Next(2) == 0 ? 'A' : 'B';
-        //    int numericPart = random.Next(min, max + 1);
+            //EMPTY LIST THAT WILL BE USED TO ENSURE THERE ARE NO REPITATIONS OF ADDRESSNAME IN EACH USER
+            HashSet<string> uniqueAddressNames = new HashSet<string>();
 
-        //    string formattedNumber = numericPart.ToString("D" + (length - 1)); // Subtract 1 for the prefix
-        //    string staffNumber = prefix + formattedNumber;
+            //CREATE RANDOM NUMBER OF ADDRESSES
+            int NumberOfAddresses = Random.Next(1, 4);
 
-        //    return staffNumber;
-        //}
+            //ASSIGN ADDRESSES
+            for (int i = 0; i < NumberOfAddresses; i++) // Assign 1 to 3 addresses
+            {
+                int randomIndex = Random.Next(addressNames.Count);
+                string addressName = addressNames[randomIndex];
 
-        //public static string GeneratePostalCode()
-        //{
-        //    Random random = new Random();
-        //    int postalCode = random.Next(1000, 10000);
-        //    return postalCode.ToString();
-        //}
+                // Ensure that each AddressName is unique within the user's addresses
+                while (!uniqueAddressNames.Add(addressName))
+                {
+                    randomIndex = Random.Next(addressNames.Count);
+                    addressName = addressNames[randomIndex];
+                }
+                var address = new Address
+                {
+                    AddressName = addressName,
+                    Street = streetNames[Random.Next(streetNames.Count)],
+                    CityOrTown = cities[Random.Next(cities.Count)],
+                    Province = provinces[Random.Next(provinces.Count)],
+                    PostalCode = GenerateRandomNumbers(1, 1000, 9999, 4)[0]
+                };
 
+                user.Addresses.Add(address);
+            }
+            return true;
+        }
+        public static string GetAorB()
+        {
+            // Generate a random number (0 or 1)
+            int randomValue = Random.Next(2);
+
+            // Return "A" if the random number is 0, or "B" if it's 1
+            return randomValue == 0 ? "A" : "B";
+        }
     }
 }
