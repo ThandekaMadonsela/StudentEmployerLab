@@ -23,24 +23,28 @@ namespace StudentEmployerLab.Models
         public override bool ValidateUser()
         {
 
-            if (!base.ValidateUser())
+            if (!base.ValidateUser() || !IsValidStudentNumber(StudentNumber))
+            {
+                Console.WriteLine("Student validation unsuccessful");
                 return false;
-
-            if (!IsValidStudentNumber(StudentNumber))
-                return false;
+            }
+            
             
             //If valid
             Console.WriteLine("Student validation successful");
             return true;
         }
 
+        //CONSUME POST
+        public bool ConsumePost(Post post)
+        {
+            Posts.Add(post);
+            return true;
+        }
+
         //SETTERS
         public bool SetStudentNumber(string value)
         {
-            if (!IsValidStudentNumber(value))
-                return false;
-
-            //If valid
             StudentNumber = value;
             return true;
         }

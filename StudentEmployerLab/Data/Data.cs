@@ -72,7 +72,7 @@ namespace StudentEmployerLab.Data
             };
 
         public static List<string> StudentNumbers = Util.GenerateRandomNumbers(20, 10000000, 99999999, 8);
-        public static List<string> StuffNumbers = Util.GenerateRandomNumbers(20, 10000000, 99999999, 7);
+        public static List<string> StuffNumbers = Util.GenerateRandomNumbers(20, 1000000, 9999999, 7);
 
 
         public static List<string> CompanyNames = new List<string>

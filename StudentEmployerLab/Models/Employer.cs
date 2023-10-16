@@ -14,7 +14,7 @@ namespace StudentEmployerLab.Models
         private readonly IPostService _postService;
         private string StaffNumber;
         private string Position;
-        public List<Post> Posts { get; set; }
+       
 
         public Employer(string fname, string lastname, string staffNumber)
            : base(fname, lastname)
@@ -26,11 +26,12 @@ namespace StudentEmployerLab.Models
         //VALIDATE USER METHOD
         public override bool ValidateUser()
         {
-            if(!base.ValidateUser())
-               return false;
-
-            if (!IsValidStaffNumber(StaffNumber))
+            if(!base.ValidateUser() || !IsValidStaffNumber(StaffNumber))
+            {
+                Console.WriteLine("Employer validation unsuccessful");
                 return false;
+            }
+           
            
             //If valid
             Console.WriteLine("Employer validation successful");
@@ -48,10 +49,7 @@ namespace StudentEmployerLab.Models
         //SETTERS
         public bool SetStaffNumber(string value)
         {
-            if (!IsValidStaffNumber(value))
-                return false;
-
-            //If valid
+            
             StaffNumber = value;
             return true;
         }

@@ -15,12 +15,14 @@ namespace StudentEmployerLab.Models
         private string EmailAddress;
         private string IDnumber;
         public List<Address> Addresses { get; set; }
+        public List<Post> Posts { get; set; }
 
         public User(string fname, string lastname)
         {
             SetFirstName(fname);
             SetSurname(lastname);
             Addresses = new List<Address>();
+            Posts = new List<Post>();
         }
 
         public virtual bool ValidateUser()
@@ -63,42 +65,26 @@ namespace StudentEmployerLab.Models
         //SETTERS
         public bool SetFirstName(string value)
         {
-            if (!IsValidName(value,"name"))
-                return false;
-            
-            //If valid
             FirstName = value;
             return true;
         }
 
-        public bool SetSurname(string value)
+        public void SetSurname(string value)
         {
-            if (!IsValidName(value, "surname"))
-                return false;
-
-            //If valid
+           
             Surname = value;
-            return true;
+            
         }
 
-        public bool SetPhoneNumber(string value)
+        public void SetPhoneNumber(string value)
         {
-            if (!IsValidPhoneNumber(value))
-                return false;
-
-            //If valid
+           
             PhoneNumber = value;
-            return true;
         }
 
-        public bool SetEmailAddress(string value)
+        public void SetEmailAddress(string value)
         {
-            if (!IsValidEmail(value))
-                return false;
-
-            //If valid
             EmailAddress = value;
-            return true;
         }
 
         public bool SetIDNumber(string value)
