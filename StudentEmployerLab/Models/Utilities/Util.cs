@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StudentEmployerLab.Data;
+using DataList = StudentEmployerLab.Data.Data;
 
 namespace StudentEmployerLab.Models.Utilities
 {
@@ -28,11 +30,11 @@ namespace StudentEmployerLab.Models.Utilities
 
             return generatedNumbers;
         }
-       public static bool AssignAddresses(User user, List<string> streetNames, List<string> cities, List<string> provinces, List<string> addressNames)
-        {
-            if (user == null || streetNames == null || cities == null || provinces == null || addressNames == null)
+       public static bool AssignAddresses(User user)
+       {
+            if (user == null)
             {
-                Console.WriteLine("Data lists cannot be empty");
+                Console.WriteLine("User cannot be null");
                 return false;
             }
 
@@ -45,28 +47,30 @@ namespace StudentEmployerLab.Models.Utilities
             //ASSIGN ADDRESSES
             for (int i = 0; i < NumberOfAddresses; i++) // Assign 1 to 3 addresses
             {
-                int randomIndex = Random.Next(addressNames.Count);
-                string addressName = addressNames[randomIndex];
+                int randomIndex;
+                string addressName;
 
                 // Ensure that each AddressName is unique within the user's addresses
-                while (!uniqueAddressNames.Add(addressName))
+                do
                 {
-                    randomIndex = Random.Next(addressNames.Count);
-                    addressName = addressNames[randomIndex];
+                    randomIndex = Random.Next(DataList.AddressNames.Count);
+                    addressName = DataList.AddressNames[randomIndex];
                 }
+                while (!uniqueAddressNames.Add(addressName));
+
                 var address = new Address
                 {
                     AddressName = addressName,
-                    Street = streetNames[Random.Next(streetNames.Count)],
-                    CityOrTown = cities[Random.Next(cities.Count)],
-                    Province = provinces[Random.Next(provinces.Count)],
+                    Street = DataList.StreetNames[Random.Next(DataList.StreetNames.Count)],
+                    CityOrTown = DataList.Cities[Random.Next(DataList.Cities.Count)],
+                    Province = DataList.Provinces[Random.Next(DataList.Provinces.Count)],
                     PostalCode = GenerateRandomNumbers(1, 1000, 9999, 4)[0]
                 };
 
                 user.Addresses.Add(address);
             }
             return true;
-        }
+       }
         public static string GetAorB()
         {
             // Generate a random number (0 or 1)

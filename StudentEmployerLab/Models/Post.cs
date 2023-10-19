@@ -1,5 +1,4 @@
-﻿using StudentEmployerLab.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,16 +8,14 @@ namespace StudentEmployerLab.Models
 {
     internal class Post
     {
-        private IEmployer Employer;
         private string CompanyName;
         private string JobDecription;
         private string Department;
         private DateOnly StartDate;
         private string Rate;
 
-        public Post(IEmployer employer, string companyName, string jobDecription, string department, DateOnly startDate, string rate)
+        public Post(string companyName, string jobDecription, string department, DateOnly startDate, string rate)
         {
-            Employer = employer;
             CompanyName = companyName;
             JobDecription = jobDecription;
             Department = department;

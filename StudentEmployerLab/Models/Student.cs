@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace StudentEmployerLab.Models
 {
@@ -36,10 +37,14 @@ namespace StudentEmployerLab.Models
         }
 
         //CONSUME POST
-        public bool ConsumePost(Post post)
+        public void ConsumePost(Post post)
         {
-            Posts.Add(post);
-            return true;
+            Console.WriteLine($"Company name -> {post.GetCompanyName()}");
+            Console.WriteLine($"Description -> {post.GetJobDescription()}");
+            Console.WriteLine($"Department -> {post.GetDepartment()}");
+            Console.WriteLine($"Rate -> {post.GetRate()}");
+            Console.WriteLine($"Start date -> {post.GetStartDate()}");
+            Console.WriteLine();
         }
 
         //SETTERS

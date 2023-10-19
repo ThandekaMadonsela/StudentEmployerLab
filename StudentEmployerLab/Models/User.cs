@@ -15,14 +15,14 @@ namespace StudentEmployerLab.Models
         private string EmailAddress;
         private string IDnumber;
         public List<Address> Addresses { get; set; }
-        public List<Post> Posts { get; set; }
+        
 
         public User(string fname, string lastname)
         {
             SetFirstName(fname);
             SetSurname(lastname);
             Addresses = new List<Address>();
-            Posts = new List<Post>();
+           
         }
 
         public virtual bool ValidateUser()
