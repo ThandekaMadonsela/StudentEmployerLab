@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
+﻿using System.Text.RegularExpressions;
+using StudentEmployerLab.Interfaces;
 
 namespace StudentEmployerLab.Models
 {
@@ -14,8 +9,8 @@ namespace StudentEmployerLab.Models
         private string StudentNumber;
         private string AverageMark;
 
-        public Student(string fname, string lastname, string studentNumber)
-            : base(fname, lastname)
+        public Student(string fname, string lastname, List<Address> addresses, string studentNumber)
+            : base(fname, lastname, addresses)
         {
             SetStudentNumber(studentNumber);
         }
@@ -37,13 +32,37 @@ namespace StudentEmployerLab.Models
         }
 
         //CONSUME POST
-        public void ConsumePost(Post post)
+        public void ConsumePost(IOpportunity opportunity, User student)
         {
-            Console.WriteLine($"Company name -> {post.GetCompanyName()}");
-            Console.WriteLine($"Description -> {post.GetJobDescription()}");
-            Console.WriteLine($"Department -> {post.GetDepartment()}");
-            Console.WriteLine($"Rate -> {post.GetRate()}");
-            Console.WriteLine($"Start date -> {post.GetStartDate()}");
+            string fname, lname;
+            student.GetFullName(out fname, out lname);
+
+            Console.WriteLine($"Student Names: {fname} {lname}");
+
+            if (opportunity is Post post)
+            {
+                Console.WriteLine("Post:");
+                Console.WriteLine($"Company name -> {opportunity.GetCompanyName()}");
+                Console.WriteLine($"Rate -> {post.GetRate()}");
+            }
+
+            if (opportunity is Bursary bursary)
+            {
+                Console.WriteLine("Bursary:");
+                Console.WriteLine($"Company name -> {opportunity.GetCompanyName()}");
+                Console.WriteLine($"Bursary value -> {bursary.GetBursaryValue()}");
+            }
+
+            if (opportunity is Party party)
+            {
+                Console.WriteLine("Party:");
+                Console.WriteLine($"Party name -> {opportunity.GetCompanyName()}");
+                Console.WriteLine($"Entrance fee -> {party.GetEntranceFee()}");
+            }
+
+            Console.WriteLine($"Description -> {opportunity.GetOpportunityDescription()}");
+            Console.WriteLine($"Department -> {opportunity.GetDepartment()}");
+            Console.WriteLine($"Start date -> {opportunity.GetStartDate()}");
             Console.WriteLine();
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StudentEmployerLab.Models
 {
-    internal class Address
+    internal struct Address
     {
         public string AddressName { get; set; }
         public string Street { get; set; }
@@ -14,7 +14,7 @@ namespace StudentEmployerLab.Models
         public string Province { get; set; }
         public string PostalCode { get; set; }
 
-        public override string ToString()
+        public string ToString()
         {
             return $"{AddressName}, {Street}, {CityOrTown}, {Province}, {PostalCode}";
         }

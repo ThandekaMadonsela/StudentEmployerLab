@@ -1,28 +1,28 @@
 ﻿using StudentEmployerLab.Interfaces;
 
-
 namespace StudentEmployerLab.Models
 {
-    internal class Post : IOpportunity
+    internal class Bursary : IOpportunity
     {
         private string CompanyName;
         private string OpportunityDescription;
         private string Department;
         private DateOnly StartDate;
-        private decimal Rate;
+        private decimal BursaryValue;
 
-        public Post(string companyName, string opportunityDescription, string department, DateOnly startDate, decimal rate)
+        public Bursary(string companyName, string opportunityDescription, string department, DateOnly startDate, decimal bursaryValue)
         {
             CompanyName = companyName;
             OpportunityDescription = opportunityDescription;
             Department = department;
             StartDate = startDate;
-            Rate = rate;
+            BursaryValue = bursaryValue;
         }
 
         // SETTERS
-        bool IOpportunity.SetCompanyName(string value)
+        public bool SetCompanyName(string value)
         {
+            //I will do some validation later
             CompanyName = value;
             return true;
         }
@@ -42,10 +42,10 @@ namespace StudentEmployerLab.Models
             return true;
         }
 
-        //SetRate
-        public bool SetRate(decimal value)
+        //SetBursaryValue
+        public bool SetBursaryValue(decimal value)
         {
-            Rate = value;
+            BursaryValue = value;
             return true;
         }
 
@@ -70,11 +70,10 @@ namespace StudentEmployerLab.Models
             return StartDate;
         }
 
-        //GetRate
-        public decimal GetRate()
+        //GetBursaryValue
+        public decimal GetBursaryValue()
         {
-            return Rate;
+            return BursaryValue;
         }
-
     }
 }

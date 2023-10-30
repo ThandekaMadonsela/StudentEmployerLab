@@ -1,29 +1,30 @@
-﻿using StudentEmployerLab.Interfaces;
+﻿
 
+using StudentEmployerLab.Interfaces;
 
 namespace StudentEmployerLab.Models
 {
-    internal class Post : IOpportunity
+    internal class Party : IOpportunity
     {
-        private string CompanyName;
+        private string PartyName;
         private string OpportunityDescription;
         private string Department;
         private DateOnly StartDate;
-        private decimal Rate;
+        private decimal EntranceFee;
 
-        public Post(string companyName, string opportunityDescription, string department, DateOnly startDate, decimal rate)
+        public Party(string partyName, string opportunityDescription, string department, DateOnly startDate, decimal entranceFee)
         {
-            CompanyName = companyName;
+            PartyName = partyName;
             OpportunityDescription = opportunityDescription;
             Department = department;
             StartDate = startDate;
-            Rate = rate;
+            EntranceFee = entranceFee;
         }
 
         // SETTERS
-        bool IOpportunity.SetCompanyName(string value)
+        public bool SetCompanyName(string value)
         {
-            CompanyName = value;
+            PartyName = value;
             return true;
         }
         public bool SetOpportunityDescription(string value)
@@ -31,7 +32,7 @@ namespace StudentEmployerLab.Models
             OpportunityDescription = value;
             return true;
         }
-        bool IOpportunity.SetDepartment(string value)
+        public bool SetDepartment(string value)
         {
             Department = value;
             return true;
@@ -42,17 +43,17 @@ namespace StudentEmployerLab.Models
             return true;
         }
 
-        //SetRate
-        public bool SetRate(decimal value)
+        //SetEntranceFee
+        public bool SetEntranceFee(decimal value)
         {
-            Rate = value;
+            EntranceFee = value;
             return true;
         }
 
         //GETTERS
         string IOpportunity.GetCompanyName()
         {
-            return CompanyName;
+            return PartyName;
         }
 
         string IOpportunity.GetOpportunityDescription()
@@ -70,11 +71,10 @@ namespace StudentEmployerLab.Models
             return StartDate;
         }
 
-        //GetRate
-        public decimal GetRate()
+        //GetEntranceFee
+        public decimal GetEntranceFee()
         {
-            return Rate;
+            return EntranceFee;
         }
-
     }
 }

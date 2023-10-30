@@ -1,4 +1,5 @@
-﻿using StudentEmployerLab.Models.Utilities;
+﻿using StudentEmployerLab.Interfaces;
+using StudentEmployerLab.Models.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,14 +14,14 @@ namespace StudentEmployerLab.Models
     {
         private string StaffNumber;
         private string Position;
-        public List<Post> Posts { get; set; }
+        public List<IOpportunity> Opportunities { get; set; }
 
 
-        public Employer(string fname, string lastname, string staffNumber)
-           : base(fname, lastname)
+        public Employer(string fname, string lastname, List<Address> addresses, string staffNumber, List<IOpportunity> opportunities)
+           : base(fname, lastname, addresses)
         {
-            SetStaffNumber(staffNumber);
-            Posts = new List<Post>();
+                SetStaffNumber(staffNumber);
+                Opportunities = opportunities;
         }
 
         //VALIDATE USER METHOD
@@ -37,16 +38,27 @@ namespace StudentEmployerLab.Models
             return true;
             
         }
+       
 
         //CREATE POST
-        public void CreatePost()
+        public bool CreatePost(Post post)
         {
-            var randomIndex = Util.Random.Next(20);
+            Opportunities.Add(post);
+            return true;
+        }
 
-            Post post = new Post(DataList.CompanyNames[randomIndex], DataList.JobDescription[randomIndex],
-                        DataList.Department[randomIndex], DataList.StartDates[randomIndex], DataList.Rates[randomIndex]);
+        //CREATE BURSARY
+        public bool CreateBursary(Bursary bursary)
+        {
+            Opportunities.Add(bursary);
+            return true;
+        }
 
-            Posts.Add(post);
+        // CREATE PARTY
+        public bool CreateParty(Party party)
+        {
+            Opportunities.Add(party);
+            return true;
         }
 
         //SETTERS
