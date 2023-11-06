@@ -35,7 +35,7 @@ namespace StudentEmployerLab.Models
         public void ConsumePost(IOpportunity opportunity)
         {
             string fname, lname;
-            Console.WriteLine();
+            
             if (GetFullName(out fname, out lname))
                 Console.WriteLine($"Student Names: {fname} {lname}");
 
@@ -54,6 +54,8 @@ namespace StudentEmployerLab.Models
             if (opportunity is Party party)
                 Console.WriteLine($"Entrance fee -> R{party.GetEntranceFee()}");
 
+
+            Console.WriteLine();
             //switch (opportunity)
             //{
             //    case Post post:
