@@ -17,11 +17,11 @@ namespace StudentEmployerLab.Models
         public List<Address> Addresses { get; set; }
         
 
-        public User(string fname, string lastname, List<Address> addresses)
+        public User(string fname, string lastname)
         {
             SetFirstName(fname);
             SetSurname(lastname);
-            Addresses = addresses;
+            Addresses = new List<Address>();
         }
 
         public virtual bool ValidateUser()

@@ -1,12 +1,5 @@
 ﻿using StudentEmployerLab.Interfaces;
-using StudentEmployerLab.Models.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using DataList = StudentEmployerLab.Data.Data;
 
 namespace StudentEmployerLab.Models
 {
@@ -14,14 +7,14 @@ namespace StudentEmployerLab.Models
     {
         private string StaffNumber;
         private string Position;
-        public List<IOpportunity> Opportunities { get; set; }
+        private List<IOpportunity> _opportunities { get; set; }
 
 
-        public Employer(string fname, string lastname, List<Address> addresses, string staffNumber, List<IOpportunity> opportunities)
-           : base(fname, lastname, addresses)
+        public Employer(string fname, string lastname, string staffNumber)
+           : base(fname, lastname)
         {
                 SetStaffNumber(staffNumber);
-                Opportunities = opportunities;
+               _opportunities = new List<IOpportunity>();
         }
 
         //VALIDATE USER METHOD
@@ -40,24 +33,10 @@ namespace StudentEmployerLab.Models
         }
        
 
-        //CREATE POST
-        public bool CreatePost(Post post)
+        //CREATE OPPORTUNITY
+        public bool CreateOpportunity(IOpportunity opportunity)
         {
-            Opportunities.Add(post);
-            return true;
-        }
-
-        //CREATE BURSARY
-        public bool CreateBursary(Bursary bursary)
-        {
-            Opportunities.Add(bursary);
-            return true;
-        }
-
-        // CREATE PARTY
-        public bool CreateParty(Party party)
-        {
-            Opportunities.Add(party);
+            _opportunities.Add(opportunity);
             return true;
         }
 
@@ -83,6 +62,11 @@ namespace StudentEmployerLab.Models
         public string GetPosition()
         {
             return Position;
+        }
+
+        public IEnumerable<IOpportunity> GetOpportunities()
+        {
+            return _opportunities;
         }
 
         //VALIDATION METHOD

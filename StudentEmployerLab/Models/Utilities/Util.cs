@@ -1,5 +1,4 @@
-﻿using StudentEmployerLab.Interfaces;
-using DataList = StudentEmployerLab.Data.Data;
+﻿using DataList = StudentEmployerLab.Data.Data;
 
 namespace StudentEmployerLab.Models.Utilities
 {
@@ -7,7 +6,146 @@ namespace StudentEmployerLab.Models.Utilities
     {
         public Random Random = new Random();
         DataList data = new DataList();
-        
+
+        /*------------------------------------GenerateUsers--------------------------------------*/
+
+        public IEnumerable<User> GenerateUsers()
+        {
+            List<User> generatedUsers = new List<User>();
+            List<string> StudentNumbers = GenerateRandomNumbers(20, 10000000, 99999999, 8);
+            List<string> StuffNumbers = GenerateRandomNumbers(20, 1000000, 9999999, 7);
+
+
+            // ADD EMPLOYERS TO LIST OF USERS
+            for (int i = 0; i < 3; i++)
+            {
+                string StaffNumberPrefix = GetAorB();
+
+                Employer employer = new Employer(data.FirstNames[i], data.Surnames[i], StaffNumberPrefix + StuffNumbers[i]);
+
+                employer.SetIDNumber(data.SAIDs[i]);
+                employer.SetPhoneNumber(data.telephoneNumbers[i]);
+
+                if (!AssignAddresses(employer))
+                {
+                    Console.WriteLine("Unable to assign address to employer");
+                }
+
+                if (!AssignOpportunities(employer))
+                {
+                    Console.WriteLine("Unable to assign opportunities to employer");
+                }
+
+                generatedUsers.Add(employer);
+            }
+
+            // ADD STUDENTS TO LIST OF USERS
+            for (int i = 4; i < 7; i++)
+            {
+                Student student = new Student(data.FirstNames[i], data.Surnames[i], StudentNumbers[i]);
+
+                student.SetIDNumber(data.SAIDs[i]);
+                student.SetPhoneNumber(data.telephoneNumbers[i]);
+
+                if (!AssignAddresses(student))
+                {
+                    Console.WriteLine("Unable to assigning address to student");
+                }
+
+                generatedUsers.Add(student);
+            }
+
+            return generatedUsers;
+        }
+
+        /*-----------------------------------AssignOpportunities------------------------------------*/
+
+        public bool AssignOpportunities(Employer employer)
+        {
+            if (employer == null)
+            {
+                Console.WriteLine("User cannot be null");
+                return false;
+            }
+
+            //CREATE RANDOM NUMBER OF Opportunities
+
+            int NumberOfOpportunities = Random.Next(1, 6);
+
+            for (int i = 0; i < NumberOfOpportunities; i++) // Assign 1 to 5 opportunities
+            {
+                int randomIndex = Random.Next(20);
+                int opportunityType = Random.Next(3); // 0, 1, or 2
+
+                switch (opportunityType)
+                {
+                    case 0:
+
+                        employer.CreateOpportunity(new Post(data.CompanyNames[randomIndex], data.JobDescription[randomIndex],
+                                           data.Department[randomIndex], data.StartDates[randomIndex], GenerateRandomAmount(5)));
+                        break;
+
+                    case 1:
+
+                        employer.CreateOpportunity(new Bursary(data.CompanyNames[randomIndex], data.JobDescription[randomIndex],
+                                          data.Department[randomIndex], data.StartDates[randomIndex], GenerateRandomAmount(5)));
+                        break;
+
+                    default:
+
+                        employer.CreateOpportunity(new Party(data.CompanyNames[randomIndex], data.JobDescription[randomIndex],
+                                          data.Department[randomIndex], data.StartDates[randomIndex], GenerateRandomAmount(4)));
+                        break;
+                }
+            }
+
+            return true;
+
+        }
+
+        /*------------------------------------AssignAddresses--------------------------------------*/
+
+        public bool AssignAddresses(User user)
+        {
+            if (user == null)
+            {
+                Console.WriteLine("User cannot be null");
+                return false;
+            }
+
+            //EMPTY LIST THAT WILL BE USED TO ENSURE THERE ARE NO REPITATIONS OF ADDRESSNAME IN EACH USER
+            HashSet<string> uniqueAddressNames = new HashSet<string>();
+
+            //CREATE RANDOM NUMBER OF ADDRESSES
+            int NumberOfAddresses = Random.Next(1, 4);
+
+            //ASSIGN ADDRESSES
+            for (int i = 0; i < NumberOfAddresses; i++) // Assign 1 to 3 addresses
+            {
+                int randomIndex;
+                string addressName;
+
+                // Ensure that each AddressName is unique within the user's addresses
+                do
+                {
+                    randomIndex = Random.Next(data.AddressNames.Count);
+                    addressName = data.AddressNames[randomIndex];
+                }
+                while (!uniqueAddressNames.Add(addressName));
+
+                var address = new Address
+                {
+                    AddressName = addressName,
+                    Street = data.StreetNames[Random.Next(data.StreetNames.Count)],
+                    CityOrTown = data.Cities[Random.Next(data.Cities.Count)],
+                    Province = data.Provinces[Random.Next(data.Provinces.Count)],
+                    PostalCode = GenerateRandomNumber(4)
+                };
+
+                user.Addresses.Add(address);
+            }
+            return true;
+        }
         /*------------------------------------GenerateRandomNumbers--------------------------------------*/
 
         public List<string> GenerateRandomNumbers(int count, int min, int max, int length)
@@ -77,100 +215,6 @@ namespace StudentEmployerLab.Models.Utilities
 
             return Math.Round(amount, 2);
         }
-        /*-----------------------------------AssignOpportunities------------------------------------*/
-
-        public bool AssignOpportunities(Employer employer)
-        {
-            if (employer == null)
-            {
-                Console.WriteLine("User cannot be null");
-                return false;
-            }
-
-            //CREATE RANDOM NUMBER OF Opportunities
-
-            int NumberOfOpportunities = Random.Next(1, 6);
-
-            for (int i = 0; i < NumberOfOpportunities; i++) // Assign 1 to 5 opportunities
-            {
-                int randomIndex = Random.Next(20);
-                int opportunityType = Random.Next(3); // 0, 1, or 2
-
-                switch (opportunityType)
-                {
-                    case 0:
-                        
-                        Post post = new Post(data.CompanyNames[randomIndex], data.JobDescription[randomIndex],
-                                    data.Department[randomIndex], data.StartDates[randomIndex], data.Rates[randomIndex]);
-
-                        employer.CreatePost(post);
-
-                        break;
-                    case 1:
-
-                        Bursary bursary = new Bursary(data.CompanyNames[randomIndex], data.JobDescription[randomIndex],
-                                          data.Department[randomIndex], data.StartDates[randomIndex], data.Rates[randomIndex]);
-
-                        employer.CreateBursary(bursary);
-
-                        break;
-                    default:
-
-                        Party party = new Party(data.PartyNames[randomIndex], data.JobDescription[randomIndex],
-                                      data.Department[randomIndex], data.StartDates[randomIndex], data.Rates[randomIndex]);
-
-                        employer.CreateParty(party);
-                        break;
-                }
-            }
-
-            return true;
-
-        }
-
-            /*------------------------------------AssignAddresses--------------------------------------*/
-
-       public bool AssignAddresses(User user)
-       {
-            if (user == null)
-            {
-                Console.WriteLine("User cannot be null");
-                return false;
-            }
-
-            //EMPTY LIST THAT WILL BE USED TO ENSURE THERE ARE NO REPITATIONS OF ADDRESSNAME IN EACH USER
-            HashSet<string> uniqueAddressNames = new HashSet<string>();
-
-            //CREATE RANDOM NUMBER OF ADDRESSES
-            int NumberOfAddresses = Random.Next(1, 4);
-
-            //ASSIGN ADDRESSES
-            for (int i = 0; i < NumberOfAddresses; i++) // Assign 1 to 3 addresses
-            {
-                int randomIndex;
-                string addressName;
-
-                // Ensure that each AddressName is unique within the user's addresses
-                do
-                {
-                    randomIndex = Random.Next(data.AddressNames.Count);
-                    addressName = data.AddressNames[randomIndex];
-                }
-                while (!uniqueAddressNames.Add(addressName));
-
-                var address = new Address
-                {
-                    AddressName = addressName,
-                    Street = data.StreetNames[Random.Next(data.StreetNames.Count)],
-                    CityOrTown = data.Cities[Random.Next(data.Cities.Count)],
-                    Province = data.Provinces[Random.Next(data.Provinces.Count)],
-                    PostalCode = GenerateRandomNumber(4)
-                };
-
-                user.Addresses.Add(address);
-            }
-            return true;
-        }
 
         /*------------------------------------GetAorB--------------------------------------*/
 
@@ -181,65 +225,6 @@ namespace StudentEmployerLab.Models.Utilities
 
             // Return "A" if the random number is 0, or "B" if it's 1
             return randomValue == 0 ? "A" : "B";
-        }
-
-        /*------------------------------------StudentCount--------------------------------------*/
-
-        public void StudentCount(int count)
-        {
-            Console.WriteLine($"--------------------------------------- Student {count}: -------------------------------------------");
-            Console.WriteLine();
-        }
-
-        /*------------------------------------GenerateUsers--------------------------------------*/
-
-        public IEnumerable<User> GenerateUsers(List<IOpportunity> opportunities, List<Address> addresses)
-        {
-            List<User> generatedUsers = new List<User>();
-            List<string> StudentNumbers = GenerateRandomNumbers(20, 10000000, 99999999, 8);
-            List<string> StuffNumbers = GenerateRandomNumbers(20, 1000000, 9999999, 7);
-
-
-            // ADD EMPLOYERS TO LIST OF USERS
-            for (int i = 0; i < 3; i++)
-            {
-                string StaffNumberPrefix = GetAorB();
-
-                Employer employer = new Employer(data.FirstNames[i], data.Surnames[i], addresses, StaffNumberPrefix + StuffNumbers[i], opportunities);
-
-                employer.SetIDNumber(data.SAIDs[i]);
-                employer.SetPhoneNumber(data.telephoneNumbers[i]);
-
-                if (!AssignAddresses(employer))
-                {
-                    Console.WriteLine("Unable to assign address to employer");
-                }
-
-                if (!AssignOpportunities(employer))
-                {
-                    Console.WriteLine("Unable to assign opportunities to employer");
-                }
-
-                generatedUsers.Add(employer);
-            }
-
-            // ADD STUDENTS TO LIST OF USERS
-            for (int i = 4; i < 7; i++)
-            {
-                Student student = new Student(data.FirstNames[i], data.Surnames[i], addresses, StudentNumbers[i]);
-
-                student.SetIDNumber(data.SAIDs[i]);
-                student.SetPhoneNumber(data.telephoneNumbers[i]);
-
-                if (!AssignAddresses(student))
-                {
-                    Console.WriteLine("Unable to assigning address to student");
-                }
-
-                generatedUsers.Add(student);
-            }
-
-            return generatedUsers;
         }
     }
 }

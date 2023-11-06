@@ -9,8 +9,8 @@ namespace StudentEmployerLab.Models
         private string StudentNumber;
         private string AverageMark;
 
-        public Student(string fname, string lastname, List<Address> addresses, string studentNumber)
-            : base(fname, lastname, addresses)
+        public Student(string fname, string lastname, string studentNumber)
+            : base(fname, lastname)
         {
             SetStudentNumber(studentNumber);
         }
@@ -32,38 +32,44 @@ namespace StudentEmployerLab.Models
         }
 
         //CONSUME POST
-        public void ConsumePost(IOpportunity opportunity, User student)
+        public void ConsumePost(IOpportunity opportunity)
         {
             string fname, lname;
-            student.GetFullName(out fname, out lname);
+            GetFullName(out fname, out lname);
 
+            Console.WriteLine();
             Console.WriteLine($"Student Names: {fname} {lname}");
-
-            if (opportunity is Post post)
-            {
-                Console.WriteLine("Post:");
-                Console.WriteLine($"Company name -> {opportunity.GetCompanyName()}");
-                Console.WriteLine($"Rate -> {post.GetRate()}");
-            }
-
-            if (opportunity is Bursary bursary)
-            {
-                Console.WriteLine("Bursary:");
-                Console.WriteLine($"Company name -> {opportunity.GetCompanyName()}");
-                Console.WriteLine($"Bursary value -> {bursary.GetBursaryValue()}");
-            }
-
-            if (opportunity is Party party)
-            {
-                Console.WriteLine("Party:");
-                Console.WriteLine($"Party name -> {opportunity.GetCompanyName()}");
-                Console.WriteLine($"Entrance fee -> {party.GetEntranceFee()}");
-            }
-
+            Console.WriteLine($"Company name -> {opportunity.GetCompanyName()}");
             Console.WriteLine($"Description -> {opportunity.GetOpportunityDescription()}");
             Console.WriteLine($"Department -> {opportunity.GetDepartment()}");
             Console.WriteLine($"Start date -> {opportunity.GetStartDate()}");
-            Console.WriteLine();
+
+
+            if (opportunity is Post post)
+                Console.WriteLine($"Rate -> R{post.GetRate()}");
+            
+            if (opportunity is Bursary bursary)
+                Console.WriteLine($"Bursary value -> R{bursary.GetBursaryValue()}");
+
+            if (opportunity is Party party)
+                Console.WriteLine($"Entrance fee -> R{party.GetEntranceFee()}");
+
+            //switch (opportunity)
+            //{
+            //    case Post post:
+            //        Console.WriteLine($"Rate -> R{post.GetRate()}");
+            //        break;
+            //    case Bursary bursary:
+            //        Console.WriteLine($"Bursary value -> R{bursary.GetBursaryValue()}");
+            //        break;
+            //    case Party party:
+            //        Console.WriteLine($"Entrance fee -> R{party.GetEntranceFee()}");
+            //        break;
+            //    default:
+            //        // case 'opportunity' doesn't match any of the opportunity type.
+            //        break;
+            //}
+
         }
 
         //SETTERS
