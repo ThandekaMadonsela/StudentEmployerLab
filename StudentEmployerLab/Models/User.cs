@@ -1,9 +1,4 @@
-﻿using System;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.AccessControl;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Xml.Linq;
+﻿using System.Text.RegularExpressions;
 
 namespace StudentEmployerLab.Models
 {
@@ -19,16 +14,16 @@ namespace StudentEmployerLab.Models
 
         public User(string fname, string lastname)
         {
-            SetFirstName(fname);
-            SetSurname(lastname);
+            FirstName = fname;
+            Surname = lastname;
             Addresses = new List<Address>();
         }
 
         public virtual bool ValidateUser()
         {
             //Firstname and Surname Validation
-            if (!IsValidName(FirstName,"name") || !IsValidName(Surname, "surname"))
-                return false;
+            //if (!IsValidName(FirstName,"name") || !IsValidName(Surname, "surname"))
+            //    return false;
 
             //ID Number validation
             if (!IsValidIDNumber(IDnumber))
@@ -64,17 +59,14 @@ namespace StudentEmployerLab.Models
         //SETTERS
         public bool SetFirstName(string value)
         {
-            FirstName = value;
-            return true;
+            return (!IsValidName(value, ref FirstName));
         }
 
-        public void SetSurname(string value)
+        public bool SetSurname(string value)
         {
-           
-            Surname = value;
-            
+            return (!IsValidName(value, ref Surname));
         }
-
+        
         public void SetPhoneNumber(string value)
         {
            
@@ -116,15 +108,14 @@ namespace StudentEmployerLab.Models
         //VALIDATION METHODS
 
         //Firstname and Surname Validation
-        private bool IsValidName(string name, string nameType)
+        private bool IsValidName(string name, ref string nameType)
         {
-           
             if(string.IsNullOrEmpty(name) ||  name.Contains(" ") || name.Length <= 3)
             {
                 Console.WriteLine($"The {nameType} {name} is invalid");
                 return false;
             }
-
+            nameType = name;
             //If valid
             return true;
         }

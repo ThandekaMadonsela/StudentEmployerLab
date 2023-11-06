@@ -15,7 +15,6 @@ namespace StudentEmployerLab.Models.Utilities
             List<string> StudentNumbers = GenerateRandomNumbers(20, 10000000, 99999999, 8);
             List<string> StuffNumbers = GenerateRandomNumbers(20, 1000000, 9999999, 7);
 
-
             // ADD EMPLOYERS TO LIST OF USERS
             for (int i = 0; i < 3; i++)
             {

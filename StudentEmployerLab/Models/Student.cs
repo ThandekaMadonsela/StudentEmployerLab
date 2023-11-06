@@ -35,10 +35,10 @@ namespace StudentEmployerLab.Models
         public void ConsumePost(IOpportunity opportunity)
         {
             string fname, lname;
-            GetFullName(out fname, out lname);
-
             Console.WriteLine();
-            Console.WriteLine($"Student Names: {fname} {lname}");
+            if (GetFullName(out fname, out lname))
+                Console.WriteLine($"Student Names: {fname} {lname}");
+
             Console.WriteLine($"Company name -> {opportunity.GetCompanyName()}");
             Console.WriteLine($"Description -> {opportunity.GetOpportunityDescription()}");
             Console.WriteLine($"Department -> {opportunity.GetDepartment()}");
